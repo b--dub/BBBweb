@@ -1,4 +1,4 @@
-This is going to be the web page that'll come up when I log into my BeagleBone Black locally on port 8080.  It's main purpose will be to house BoneScript (js) apps for experimentation with interactive BeagleBone projects.  This will be my first experience with LightTPD, BeagleBone Black, Aptana Studio, HTML5, CSS3, or JavaScript (BoneScript), so it's likely to be fairly clumsy in design and operation as I learn about each of the components.  
+This is going to be the web page that'll come up when I log into my BeagleBone Black locally on port 8080.  It's main purpose will be to house BoneScript (js) apps for experimentation with interactive BeagleBone projects.  This will be my first experience with Web Servers (LightTPD), BeagleBone Black, Web Design (Aptana Studio), HTML5, CSS3, or JavaScript (BoneScript), so it's likely to be fairly clumsy in design and operation as I learn about each of the components.  
 
 Any comments or suggestions are, of course, always welcome.
 
