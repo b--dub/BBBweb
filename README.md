@@ -1,3 +1,11 @@
+This is going to be the web page that'll come up when I log into my BeagleBone Black locally on port 8080.  It's main purpose will be to house BoneScript (js) apps for experimentation with interactive BeagleBone projects.  This will be my first experience with LightTPD, BeagleBone Black, Aptana Studio, HTML5, CSS3, or JavaScript (BoneScript), so it's likely to be fairly clumsy in design and operation as I learn about each of the components.  
+
+Any comments or suggestions are, of course, always welcome.
+
+
+I'm leaving the HTML5 Boilerplate part of the README that Aptana has added as it's free software and seems appropriate to do so.  I don't however claim to have read or understand it   :)
+
+
 # [HTML5 Boilerplate](http://html5boilerplate.com)
 
 HTML5 Boilerplate is a professional front-end template for building fast,
