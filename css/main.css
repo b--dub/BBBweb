@@ -100,14 +100,15 @@ textarea {
    ========================================================================== */
 
 body	{
-	background-image: url(../img/Prowler_3_by_messiah1_1024x768.jpg);
+	background-image: url(../img/backgrounds/8881450703_688101704b_o.jpg);
 	/*background-image: url(../img/BBBdog.gif), url(../img/Prowler_3_by_messiah1_1024x768.jpg);*/
-	color: #0170FE;
+	color: #DDDDFF;
 	font: monospace;
 	font-family: serif;
 }
 
 h1		{
+	font-size: 48px;
 	text-align: center;
 	text-shadow: 3px 3px #888888;
 }
