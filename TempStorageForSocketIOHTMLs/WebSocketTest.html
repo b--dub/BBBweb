@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<script>
+ var delimiter = ':/';
+ var ws = new WebSocket("ws://192.168.2.2:8081", "http");
+ ws.onopen = function()
+ {
+    // Web Socket is connected, send data using send()
+    document.getElementById( 'statusTextField' ).value = "Connection opened...";
+ };
+ ws.onmessage = function (evt) 
+ { 
+    var dataArr = evt.data.split(":/");
+    dataArr.forEach(function(token){
+    	document.getElementById( 'inboundTextField' ).value += token + "\n";
+    });
+    
+ };
+ ws.onclose = function()
+ { 
+    // websocket is closed.
+    document.getElementById( 'statusTextField' ).value = 
+    	document.getElementByID( 'statusTextField' ).value + "Connection Closed!!!";
+ };
+ 
+function sendMessage() {
+	ws.send(document.getElementById( 'outboundTextField' ).value);
+	document.getElementById('outboundTextField').value = "";
+}
+</script>
+</head>
+<body>
+<div id="sse">
+	<h2>Output</h2>
+   <textarea id="inboundTextField" cols="60" rows="15">Waiting for message...</textarea><br />
+   <h2>Status</h2>
+   <textarea id="statusTextField" cols="60" rows="5" readonly>Waiting for status update...</textarea><br />
+   <h2>Input</h2>
+   <textarea id="outboundTextField" cols="60" rows="5">Outbound messages...</textarea><br />
+   <input type="button" value="Submit" name="submit" onclick="sendMessage();">
+</div>
+
+</body>
+</html>

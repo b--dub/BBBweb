@@ -1,0 +1,94 @@
+<!DOCTYPE HTML>
+<head>
+<title>AnalogWrite_LED_P8_13</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<link rel="icon" href="/BBBweb/img/BBBdog.gif">
+<link rel="stylesheet" href="../css/UIs.css">
+
+<style>
+	body {background-image: url(../img/backgrounds/beaglebone-black.jpg);}
+</style>
+
+
+<script>
+var DELIMITER = '::';
+var	PATH = '/var/lib/cloud9/BeagleBoneScripts/AnalogWrite_LED_P8_13/';
+var	SCRIPT = 'AnalogWrite_LED_P8_13.js';
+var	ws = new WebSocket("ws://192.168.2.2:8081", "http");
+
+ws.onopen = function()
+{
+    // Web Socket is connected, send data using send()
+    document.getElementById('textarea').value += "onopen(): Handshake Completed\n";
+    document.getElementById('connected').checked = "checked";
+};
+
+ws.onmessage = function (evt) 
+{ 
+	var dataArr = evt.data.split(DELIMITER);
+    for (var i=0; i<dataArr.length; i+=2) {
+    	switch(dataArr[i*2]) {
+    	case 'value':
+    		document.getElementById('slider').value = dataArr[i*2+1]*100;
+    		break;
+    	case 'status':
+    		document.getElementById(dataArr[i*2+1]).checked = "checked";
+    		break;
+    	case 'start':
+    		document.getElementById('stop').focus();
+    		document.getElementById('start').blur();
+    		break;
+    	case 'stop':
+    		document.getElementById('stop').blur();
+    		document.getElementById('start').focus();
+    		break;
+    	default:
+    		document.getElementById('textarea').value += "ERROR: Invalid Token Type\n";
+    	}
+    	document.getElementById('textarea').value += dataArr[i*2] + ": " + dataArr[i*2+1];
+    };
+    
+};
+
+ws.onclose = function()
+{ 
+    // websocket is closed.
+    document.getElementById('textarea').value += "ATTENTION: onclose() Event received"; 
+   	document.getElementByID('disconnected').checked = "checked";
+};
+ 
+function updateSlider(value) {
+	ws.send("value" + DELIMITER + value);
+};
+
+function start() {
+	ws.send("start" + DELIMITER + PATH + SCRIPT);
+};
+
+function stop() {
+	ws.send("stop" + DELIMITER + PATH + SCRIPT);
+};
+</script>
+</head>
+
+
+
+
+<body>
+	<p><h1>AnalogWrite() Method to an LED on Pin P8_13 using PWM</h1></p>
+	<div style="vertical-align:center; margin: auto; display: block; width: 580px;">
+		<table>
+			<td style="vertical-align: top;" align="center">
+				<input style=" width: 300px; height: 50px; " id="slider" type="range" min="0" max="100" step="1" value="10" onchange="updateSlider(this.value)">
+				<textarea readonly id="textarea" cols="60" rows="15" maxLength=50></textarea>
+			</td>
+			<td style="vertical-align: top">
+				<input disabled type="radio" id="connected" name="sex" value="male"><strong>Connected</strong><br />
+				<input disabled type="radio" id="disconnected" name="sex" value="female" checked="checked"><strong>Disconnected</strong><br /><br />
+				<input type="button" id="start" value="Start" onclick="start();">
+				<input type="button" id="stop" value="Stop " onclick="stop();">
+			</td>
+		</table>
+	</div>
+</body>
