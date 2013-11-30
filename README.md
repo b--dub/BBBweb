@@ -5,7 +5,7 @@ UPDATE - I've found that running server-side scripts (which is what the JS/BoneS
 ![alt tag](/img/Interoperations_Layout.bmp)
 
 
-The scripts that this repository calls to are kept in another repo (/BeagleBoneScripts).  I'll be keeping the node server in my autorun directory under /var/lib/cloud9, but will also be adding it to both these repos just for cohesion in tracking.
+The scripts that this repository calls to are kept in another repo (/b--dub/BeagleBoneScripts).  I'll be keeping the node server in my autorun directory under /var/lib/cloud9 so that it will launch when I boot the Beagle, but will be storing it in the /BeagleBoneScripts repo as I'm writing/updating it in Cloud 9 with the other scripts and this makes it easier to keep everything updated cohesively.
 
 
 Any comments or suggestions are, of course, always welcome.
