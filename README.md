@@ -2,9 +2,7 @@ This is going to be the web page that'll come up when I log into my BeagleBone B
 
 UPDATE - I've found that running server-side scripts (which is what the JS/BoneScript apps seem to have to be) requires a server-side JS interpreter.  For this purpose I've created a node.js server to listen in on port 8081, establish WebSocket connections using the ws library, and execute the scripts that the HTML pages on port 8080 ask for.  It also serves as a middle man between the script and the calling web page (which now serves as the user interface for the application being called), passing data from the script to the web page, and vice versa.  
 
-OUT    WebSocket.send         ws.send             process.stdin         console.log
-   [8080 HTML] <----------------> [8081 node.js server] <-----------------> [node interpreter running script] 
-IN     WebSocket.onmessage    ws.onmessage        process.stdout        readline.on('line')
+![alt tag](https://github.com/b--dub/BBBweb/img/Interoperations_Layout.bmp)
 
 
 The scripts that this repository calls to are kept in another repo (/BeagleBoneScripts).  I'll be keeping the node server in my autorun directory under /var/lib/cloud9, but will also be adding it to both these repos just for cohesion in tracking.
