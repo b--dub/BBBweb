@@ -12,16 +12,17 @@
 
 
 <script>
-var DELIMITER = '::';
-var	PATH = '/var/lib/cloud9/BeagleBoneScripts/AnalogWrite_LED_P8_13/';
-var	SCRIPT = 'AnalogWrite_LED_P8_13.js';
-var	ws = new WebSocket("ws://192.168.2.2:8081", "http");
+
+var DELIMITER = '::',
+	PATH = '/var/lib/cloud9/BeagleBoneScripts/AnalogWrite_LED_P8_13/',
+	SCRIPT = 'AnalogWrite_LED_P8_13.js',
+	ws = new WebSocket("ws://192.168.2.2:8081", "http");
 
 ws.onopen = function()
 {
     // Web Socket is connected, send data using send()
-    document.getElementById('textarea').value += "onopen(): Handshake Completed\n";
-    document.getElementById('connected').checked = "checked";
+    eiTextarea.value += "ATTENTION: onopen() Handshake Completed\n";
+    eiTextarea.scrollTop = eiTextarea.scrollHeight;
 };
 
 ws.onmessage = function (evt) 
@@ -30,23 +31,26 @@ ws.onmessage = function (evt)
     for (var i=0; i<dataArr.length; i+=2) {
     	switch(dataArr[i*2]) {
     	case 'value':
-    		document.getElementById('slider').value = dataArr[i*2+1]*100;
+    		dataArr[i*2+1] = dataArr[i*2+1].replace('\n','');
+    		eiSlider.value = dataArr[i*2+1]*100;
     		break;
     	case 'status':
-    		document.getElementById(dataArr[i*2+1]).checked = "checked";
+    		if (dataArr[i*2+1]=="connected") eiConnected.checked="checked";
+    		if (dataArr[i*2+1]=="disconnected") eiDisconnected.checked="chedked";
     		break;
     	case 'start':
-    		document.getElementById('stop').focus();
-    		document.getElementById('start').blur();
+    		eiStop.focus();
+    		eiStart.blur();
     		break;
     	case 'stop':
-    		document.getElementById('stop').blur();
-    		document.getElementById('start').focus();
+    		eiStop.blur();
+    		eiStart.focus();
     		break;
     	default:
-    		document.getElementById('textarea').value += "ERROR: Invalid Token Type\n";
+    		eiTextarea.value += "ERROR: Invalid Token Type\n";
     	}
-    	document.getElementById('textarea').value += dataArr[i*2] + ": " + dataArr[i*2+1];
+    	eiTextarea.value += dataArr[i*2] + ": " + dataArr[i*2+1] + "\n";
+    	eiTextarea.scrollTop = eiTextarea.scrollHeight;
     };
     
 };
@@ -54,21 +58,36 @@ ws.onmessage = function (evt)
 ws.onclose = function()
 { 
     // websocket is closed.
-    document.getElementById('textarea').value += "ATTENTION: onclose() Event received"; 
-   	document.getElementByID('disconnected').checked = "checked";
+    eiTextarea.value += "ATTENTION: onclose() event received\nConnection closed\n"; 
+   	eiDisconnected.checked = "checked";
+   	eiTextarea.scrollTop = eiTextarea.scrollHeight;
 };
- 
+
 function updateSlider(value) {
 	ws.send("value" + DELIMITER + value);
 };
 
+// Start and stop script execution
 function start() {
 	ws.send("start" + DELIMITER + PATH + SCRIPT);
+	eiStop.focus();
+    eiStart.blur();
 };
-
 function stop() {
 	ws.send("stop" + DELIMITER + PATH + SCRIPT);
+	eiStop.blur();
+    eiStart.focus();
 };
+
+// Connect and disconnect from node server on :8081
+function connect() {
+	window.location.reload();
+};
+function disconnect() {
+	ws.send("command" + DELIMITER + "disconnect");
+	//ws.close();
+};
+
 </script>
 </head>
 
@@ -80,14 +99,15 @@ function stop() {
 	<div style="vertical-align:center; margin: auto; display: block; width: 580px;">
 		<table>
 			<td style="vertical-align: top;" align="center">
-				<input style=" width: 300px; height: 50px; " id="slider" type="range" min="0" max="100" step="1" value="10" onchange="updateSlider(this.value)">
-				<textarea readonly id="textarea" cols="60" rows="15" maxLength=50></textarea>
+				<input style=" width: 300px; height: 50px; " id="eiSlider" type="range" min="0" max="100" step="1" value="10" onchange="updateSlider(this.value)">
+				<textarea readonly id="eiTextarea" cols="60" rows="15" ></textarea>
 			</td>
 			<td style="vertical-align: top">
-				<input disabled type="radio" id="connected" name="sex" value="male"><strong>Connected</strong><br />
-				<input disabled type="radio" id="disconnected" name="sex" value="female" checked="checked"><strong>Disconnected</strong><br /><br />
-				<input type="button" id="start" value="Start" onclick="start();">
-				<input type="button" id="stop" value="Stop " onclick="stop();">
+				<input type="radio" id="eiConnected" name="sex" value="male" onclick="connect();"><strong>Connected</strong><br />
+				<input type="radio" id="eiDisconnected" name="sex" value="female" checked="checked" onclick="disconnect();"><strong>Disconnected</strong><br /><br />
+				<input type="button" id="eiStart" value="Start" onclick="start();">
+				<input type="button" id="eiStop" value="Stop " onclick="stop();">
+				<input type="button" id="eiClear" value="Clear" onclick="eiTextarea.value='';">
 			</td>
 		</table>
 	</div>
